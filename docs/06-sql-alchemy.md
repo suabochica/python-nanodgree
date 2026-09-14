@@ -102,3 +102,51 @@ Moreover, SQLAlchemy is split into two libraries:
 The next image summarizes the layer of abstraction of SQLAlchemy:
 
 ![SQLAlchemy Layer of Abstraction](../images/sqlalchemy-layers-of-abstraction.png)
+
+## Mapping Between Tables and classes
+
+Let's say that we have a class named Human. The Human class allows us to instantiate an instance of a human being, that has
+
+```python
+class Human:
+   def __init__(self, first_name, last_name, age):
+       self.first_name = first_name
+       self.last_name = last_name
+       self.age= age
+
+```
+
+We can recall object-oriented programming and instantiating a class is very much like instantiating a collection of objects that could exist.
+
+For example, let's say that we want to create two human beings, named Sarah and Bob. We would do that by creating object instances of the Human class, where we then pass in the attributes that define a single human being.
+
+```python
+sarah = new Human("Sarah","Silverman",48)
+bob = new Human("Bob","Saget",54)
+```
+
+For example, we could have humans Sarah Silverman of age 48 be one instance of a human being, and another instance of a human being be Bob Saget of age 54. Sarah and Bob both differ from each other because they have different attributes of their class Human, but they're both humans.
+
+Similarly, you can think of a table that we create in a database, as a template for future rows to come, or in this case, for future human objects that could exist. That template specifies the types of columns that we would have on a table, which is equivalent to the types of attributes that we would list on a Human class. So if a human can have a first name and last name and age, then in the table, that means that we would specify those as the columns of that table. The columns of the table are essential for all the common attributes that exist across all humans or all records inside of that table.
+
+```sql
+CREATE TABLE humans (
+   id INTEGER PRIMARY KEY,
+   first_name VARCHAR,
+   last_name VARCHAR,
+   age INTEGER
+);
+
+```
+
+In order to create the records for Sarah and Bob, we would simply list Sarah and Bob and their values for every column, as rows within the table. So it's easy to see that the way that we instantiate a class in Python, or in other languages, is very similar to the way that we would instantiate a table in a Relational Database System. The way that we would create instances of that class or objects of that class, which have different attributes and different values for each of those attributes, is a very similar process, to the way that we would create rows within the table, that will have different values for every column.
+
+![Classes and database tables are similar](../images/pysql.png)
+
+A column maps to an attribute on a class. The table schema matches to the class definition of the class as a whole, and rows within a table, match to records or objects that are instances of a class. So the takeaways are, tables mapped to classes, table records mapped to class objects, and table columns mapped to the attributes within that class.
+
+In short:
+
+- Tables maps to classes.
+- Tables records maps to objects.
+- Tables columns maps to attributes.

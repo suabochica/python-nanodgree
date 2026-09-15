@@ -75,3 +75,11 @@ Without flask, in order to add a column, we would modify the mode, drop the tabl
   - Allow Flask-Migrate to auto-generate a migration script based on the changes
   - Fine-tune the migration scripts
   - Run the migration, aka “upgrade” the database schema by a “version”
+
+## Glossary
+
+- Migrations are code-based strategies that allow you to manipulate the schema or data in a database after it has already been created and has data in it. They are useful for recording changes, as well as providing a way to "rollback" changes. There can be several migration files "stacked" on top of one another in order.
+- In a DBMS, a database schema helps to define the different tables and fields in each table. It also describes the relationships between different tables.
+- We can upgrade our database schema by applying migrations. This applies as schema changes permanently
+- We can roll back our database schema to a former version by reverting migrations that we applied
+

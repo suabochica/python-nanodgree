@@ -150,3 +150,20 @@ In short:
 - Tables maps to classes.
 - Tables records maps to objects.
 - Tables columns maps to attributes.
+
+## Lesson review
+
+In this lesson, we introduced SQL Alchemy, theoretically as well as in practice. We looked specifically look at:
+
+- How the components of SQL Alchemy and ORM are structure
+- What are dialects
+- What is a connection pool
+- How does the core engine work
+- How classes and tables are mapped
+- How models are defined
+- How data types are handled
+- How to define constraints
+
+The next pyramid summarize the SQLAlchemy contents:
+
+![SQLAlchemy layers](../images/sqlalchemy-layers.png)

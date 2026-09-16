@@ -1,5 +1,5 @@
 [project]
-name = "todoapp-migrations"
+name = "todoapp_migrations"
 version = "0.1.0"
 description = "Project to understand how works migrations in flask"
 readme = "README.md"
@@ -10,7 +10,7 @@ requires-python = ">=3.14"
 dependencies = []
 
 [project.scripts]
-todoapp = "todoapp:main"
+todoapp = "todoapp_migrations:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"

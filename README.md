@@ -134,3 +134,21 @@ my-local-lib = { workspace = true }
 - `uv sync`: Syncs dependencies for the entire workspace or the package in your current directory.
 - `uv run --package <name> <command>`: Runs a command targeting a specific workspace member.
 - `uv lock`: Generates or updates the unified lockfile for all members.
+
+## Standard `src` Layout
+
+Each workspace member should follow the standard `src` layout:
+
+```
+package_name/
+├── pyproject.toml
+└── src/
+    └── package_name/   ← importable package
+        ├── __init__.py
+        └── app.py
+```
+
+- `src/` prevents accidentally importing from the working directory during development.
+- The inner `package_name/` directory is the actual importable module.
+
+This is the convention expected by `uv_build` and most modern Python build backends.

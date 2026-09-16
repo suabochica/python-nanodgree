@@ -1,6 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv(Path(__file__).resolve().parents[4] / ".env")
@@ -24,12 +24,12 @@ class Todo(db.Model):
 
 @app.route("/todos/create", methods=["POST"])
 def create_todo():
-    description = request.form.get("description")
+    description = request.json.get("description")
     todo = Todo(description=description)
     db.session.add(todo)
     db.session.commit()
 
-    return redirect(url_for("index"))
+    return jsonify({"description": todo.description})
 
 
 @app.route("/")

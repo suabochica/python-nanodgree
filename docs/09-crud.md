@@ -28,3 +28,43 @@ In summary, here are the skills we'll master over these next 3 lesson as we buil
 - Implementing Search
 
 We'll cover these skills through a hands-on approach by building out our to-do application across these next 3, final lessons of this section!
+
+## MVC
+
+MVC stands for Model-View-Controller, a common pattern for architecting web applications
+Describes the 3 layers of the application we are developing
+
+- _Models_ manage data and business logic for us. What happens inside models and databases, capturing logical relationships and properties across the web app objects
+- _Views_ handle display and representation logic. What the user sees (HTML, CSS, JS from the user's perspective)
+- _Controllers_ routes commands to the models and views, containing control logic. Control how commands are sent to models and views, and how models and views wound up interacting with each other.
+
+How a banking app on your phone uses the MVC model is: the storage of all transactions, balances, profiles, and accounts is part of the model since it is all about data. The brain and logic, or controller, is the code that runs the code behind all screens and interactive elements on the app itself. The graphical user interface, represented by the actually installed app on the phone is what users see. This is the view.
+
+Creating, updating, and deleting information from a database requires handling user input on what is being created/updated/deleted.
+
+Below are the responsibilities of each layer to achieve oru to do app.
+
+- On the view: implement an HTML form
+- On the controller: retrieve the user's input, and manipulate models
+- On the models: create a record in our database, and return the newly created to-do item to the controller
+- On the controller: take the newly created to-do item, and decide how to update the view with it.
+
+There are 3 methods of getting user data from a view to a controller:
+
+1. URL query parameters
+2. Forms
+3. JSON
+
+The way form data traverses from the client to server differs based on whether we are using a `GET` or a `POST` method on the form.
+
+The POST submission
+
+- On submit, we send off an HTTP POST request to the route /create with a request body
+- The request body stringifies the key-value pairs of fields from the form (as part of the name attribute) along with their values.
+
+The GET submission
+
+- Sends off a GET request with URL query parameters that appends the form data to the URL.
+- Ideal for smaller form submissions.
+
+POSTs are ideal for longer form submissions, since URL query parameters can only be so long compared to request bodies (max 2048 characters). Moreover, forms can only send POST and GET requests, and nothing else.

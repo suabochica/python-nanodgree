@@ -3,6 +3,10 @@
     <title>Todo App</title>
   </head>
   <body>
+    <form action="/todos/create" method="post">
+      <input type="text" name="description" value="add a decription">
+      <input type="submit" value="create">
+    </form>
     <ul>
       {% for d in data %}
       <li>{{ d.description }}</li>

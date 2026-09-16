@@ -34,7 +34,7 @@ Safely install your packages inside the environment:
 pip install requests
 ```
 
-When you are finished working, simply type deactivate to exit. 
+When you are finished working, simply type deactivate to exit.
 
 ## Install Postgres on Ubuntu
 
@@ -81,7 +81,7 @@ sudo systemctl status postgresql
 
 ### Step 4: Secure the Default Administrative Role
 
-PostgreSQL utilizes a "role" system for authentication. By default, it creates a system user account called postgres. 
+PostgreSQL utilizes a "role" system for authentication. By default, it creates a system user account called postgres.
 
 To secure your installation, log into the local prompt and assign a strong password to this master administrative role:
 
@@ -98,3 +98,39 @@ ALTER USER postgres WITH PASSWORD 'your_secure_password_here';
 ```
 
 Type `\q` and press `Enter` to exit the prompt.
+
+## Working with uv workspaces
+
+A uv workspace lets you manage multiple interconnected Python packages inside a single repository using a shared lockfile and virtual environment.
+
+?Inspired by Rust’s Cargo, workspaces allow you to group multiple apps or libraries together.
+
+- _Single Lockfile_: All packages share one `uv.lock` file to keep dependency versions consistent.
+- _Single Virtual Environment_: Commands use one shared .venv at the workspace root instead of separate environments for each sub-project.
+- _Local Sources_: Packages can depend on each other locally without needing manual rebuilds.
+
+)Most users on r/FastAPI agree that placing sub-packages inside a packages folder is the standard and most idiomatic layout.
+
+## Basic Setup
+
+To set up a workspace, create a root `pyproject.toml` file that defines your workspace members using globs:
+
+```toml
+[tool.uv.workspace]
+
+members = [
+    "packages/*"
+]
+```
+
+```toml
+[tool.uv.sources]
+my-local-lib = { workspace = true }
+
+```
+
+## Common Commands
+
+- `uv sync`: Syncs dependencies for the entire workspace or the package in your current directory.
+- `uv run --package <name> <command>`: Runs a command targeting a specific workspace member.
+- `uv lock`: Generates or updates the unified lockfile for all members.

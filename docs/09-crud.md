@@ -85,3 +85,12 @@ except:
 finally:
    db.session.close()
 ```
+
+## Glossary
+
+- MVC, or Model-View-Controller, is a design and architectural pattern that breaks up an application into three elements: the model(the data), the view(the graphical interface that users see), and the controller(the code-logic behind the app) It is an industry-standard web development framework used heavily throughout the world.
+- Ajax allows web pages to be updated fast through asynchronously exchanging small amounts of data back and forth with the server. It allows only a part of a web page to be updated without reloading the entire page.
+- CRUD Any database should be able to (C)reate, (R)ead, (U)pdate, and (D)elete data.
+- A session represents all interactions with the database and actually implements a “holding zone” for all the data objects that were affected during this time. They can be finalized (made permanent) by committing the changes, or rolling back if unwanted'
+- XMLHttpRequest (XHR) objects are used to interact with servers in order to get data from a URL (or page) without having to do an actual full page refresh. Web pages can update just a small part of a page without interrupting what the user is doing. XMLHttpRequest is used heavily in AJAX programming.
+- Migrations are code-based strategies that allow you to manipulate the schema or data in a database after it has already been created and has data in it. They are useful for recording changes, as well as providing a way to "rollback" changes. There can be several migration files "stacked" on top of one another in order.

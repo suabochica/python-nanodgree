@@ -68,3 +68,20 @@ The GET submission
 - Ideal for smaller form submissions.
 
 POSTs are ideal for longer form submissions, since URL query parameters can only be so long compared to request bodies (max 2048 characters). Moreover, forms can only send POST and GET requests, and nothing else.
+
+Commits can succeed or fail. On fail, we want to rollback the session to avoid potential implicit commits done by the database on closing a connection. It is a good practice to close connections at the end of every session used in a controller, to return the connection back to the connection pool. This is reflected with the `pattern (try-except-finally)`
+
+```py
+import sys
+
+try:
+   todo = Todo(description=description)
+   db.session.add(todo)
+   db.session.commit()
+except:
+   db.session.rollback()
+   error=True
+   print(sys.exc_info())
+finally:
+   db.session.close()
+```

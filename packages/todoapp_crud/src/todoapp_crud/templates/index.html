@@ -6,6 +6,10 @@
     .hidden {
       display: none;
     }
+
+    li {
+      list-style: none;
+    }
   </style>
 
   <body>
@@ -19,6 +23,7 @@
       <li>
         <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked {% endif %} />
         {{ todo.description }}
+        <button class="delete-button" data-id="{{ todo.id }}">&cross;</button>
       </li>
       {% endfor %}
     </ul>
@@ -49,6 +54,30 @@
         })
       }
     }
+
+    const deleteButtons = document.querySelectorAll('.delete-button')
+
+    for (let i = 0; i < deleteButtons.length; i++) {
+      const deleteButton = deleteButtons[i];
+
+      deleteButton.onclick = function(event) {
+        event.preventDefault();
+        const todoId = deleteButton.dataset['id'];
+
+        fetch(`/todos/${todoId}`, {
+          method: 'DELETE',
+        })
+        .then(function() {
+          deleteButton.parentElement.remove();
+          document.getElementById('error').className = 'hidden';
+        })
+        .catch(function() {
+          document.getElementById('error').className = '';
+        })
+      }
+    }
+
+
 
     document.getElementById('form').onsubmit = function(event) {
       event.preventDefault();

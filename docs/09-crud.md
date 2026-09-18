@@ -126,3 +126,30 @@ db.session.commit()
 In order to implement a checkbox that's based on the to-do items completed state, we're going to need to learn a little bit more about the Jinja templating engine, that's in Flask, and we're going to need to learn particularly about statements that allow us to do conditional if-statements.
 
 So using the documentation link below, we can see how to use the if statement in Jinja where we can do something like `iftodo.completed`, show this particular attribute in HTML.
+
+## Deleting a resource
+
+Deletes deal with removing existing objects in our database
+
+In SQL:
+
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
+In SQLAlchemy ORM:
+
+```py
+todo = Todo.query.get(todo_id)
+db.session.delete(todo) # or...
+Todo.query.filter_by(id=todo_id).delete()
+db.session.commit()
+```
+
+Steps we'll implement:
+
+- Loop through every To-Do item and show a delete button
+- Pressing the delete button sends a request that includes which to-do item to delete
+- The controller takes the user input, and notifies the models to delete the To-Do object by ID
+- On successful deletion by the models, the controller should notify the view to refresh the page and redirect to our homepage, showing a fresh fetch of all To-Do items to now exclude the removed

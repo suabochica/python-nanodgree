@@ -10,7 +10,6 @@ load_dotenv(Path(__file__).resolve().parents[4] / ".env")
 
 app = Flask(__name__)
 
-
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -22,9 +21,8 @@ class TodoList(db.Model):
     name = db.Column(db.String(), nullable=False)
     todos = db.relationship("Todo", backref="list", lazy=True)
 
-
-def __repr__(self):
-    return f"<TodoList {self.id} {self.name}>"
+    def __repr__(self):
+        return f"<TodoList {self.id} {self.name}>"
 
 
 class Todo(db.Model):
@@ -34,21 +32,23 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, nullable=False, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey("todolists.id"), nullable=True)
 
-
-def __repr__(self):
-    return f"<Todo {self.id} {self.description}, list {self.list_id}>"
+    def __repr__(self):
+        return f"<Todo {self.id} {self.description}, list {self.list_id}>"
 
 
 @app.route("/todos/create", methods=["POST"])
 def create_todo():
     error = False
     body = {}
-
     try:
-        description = request.json.get("description")
+        description = request.get_json()["description"]
+        list_id = request.get_json()["list_id"]
         todo = Todo(description=description)
+        active_list = db.session.get(TodoList, list_id)
+        todo.list = active_list
         db.session.add(todo)
         db.session.commit()
+        body["id"] = todo.id
         body["description"] = todo.description
     except:
         error = True
@@ -56,10 +56,10 @@ def create_todo():
         print(sys.exc_info())
     finally:
         db.session.close()
-    if error:
-        abort(400)
-    else:
+    if not error:
         return jsonify(body)
+    else:
+        abort(500)
 
 
 @app.route("/todos/<todo_id>/set-completed", methods=["POST"])
@@ -91,12 +91,19 @@ def delete_todo(todo_id):
     return jsonify({"success": True})
 
 
-@app.route("/")
-def index():
+@app.route("/lists/<list_id>")
+def get_list_todos(list_id):
     return render_template(
         "index.html",
-        data=Todo.query.all(),
+        lists=TodoList.query.all(),
+        active_list=db.session.get(TodoList, list_id),
+        todos=Todo.query.filter_by(list_id=list_id).order_by(Todo.id),
     )
+
+
+@app.route("/")
+def index():
+    return redirect(url_for("get_list_todos", list_id=1))
 
 
 # always include this at the bottom of your code

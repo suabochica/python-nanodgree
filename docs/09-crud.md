@@ -253,3 +253,13 @@ class Vehicle (db.model):
   ...
   driver_id = db.Column(db.Integer, db.ForeignKey('drivers.id'),nullable=False)
 ```
+
+## Types of Relationship
+
+There are three types of relationships.
+
+1. One-to-many, for example, a class has many students or a teacher has many students.
+2. One-to-one captures a relationship between two different models, where there's only one thing between the two of them, like a passport that belongs to a person, although a passport and a person are very different models.
+3. Many-to-many, for example, a school teaches many subjects and a subject is taught in many schools. Many-to-many is a tricky case here that we're going to need to visit in more detail.
+
+In one-to-many and one-to-one, the foreign key is established on the child model. In many-to-many, a special association table exists to join the two tables together, storing two foreign keys that link to the two foreign tables that have a relationship with each other.

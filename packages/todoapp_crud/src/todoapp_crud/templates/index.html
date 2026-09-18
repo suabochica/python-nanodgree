@@ -11,17 +11,45 @@
   <body>
     <div id="error" class="hidden">Something went wrong!</div>
     <form id="form">
-      <input type="text" name="description" value="add a decription">
-      <input type="submit" value="create">
+      <input type="text" name="description" placeholder="Add a description">
+      <input type="submit" value="Create">
     </form>
     <ul id="todos">
-      {% for d in data %}
-      <li>{{ d.description }}</li>
+      {% for todo in data %}
+      <li>
+        <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked {% endif %} />
+        {{ todo.description }}
+      </li>
       {% endfor %}
     </ul>
   </body>
 
   <script>
+    const checkboxes = document.querySelectorAll('.check-completed');
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      const checkbox = checkboxes[i];
+      const todoId = checkbox.dataset['id'];
+
+      checkbox.onchange = function(event) {
+        const isChecked = event.target.checked;
+
+        fetch(`/todos/${todoId}/set-completed`, {
+          method: 'POST',
+          body: JSON.stringify({ completed: isChecked }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function() {
+          document.getElementById('error').className = 'hidden';
+        })
+        .catch(function() {
+          document.getElementById('error').className = '';
+        })
+      }
+    }
+
     document.getElementById('form').onsubmit = function(event) {
       event.preventDefault();
       const description = document.querySelector('input[name="description"]').value;
@@ -31,17 +59,18 @@
         headers: {
           'Content-Type': 'application/json'
         }
-      }).then(function (response) {
+      })
+      .then(function(response) {
         return response.json();
-      }).then(function (jsonResponse) {
-        console.log(jsonResponse);
+      })
+      .then(function(jsonResponse) {
         const liItem = document.createElement("li");
-
-        liItem.innerHTML = jsonResponse['description'];
+        liItem.innerHTML = `<input class="check-completed" type="checkbox" /> ${jsonResponse['description']}`;
         document.getElementById('todos').appendChild(liItem);
-        document.getElementById('error').className='hidden';
-      }).catch(function() {
-        document.getElementById('error').className='';
+        document.getElementById('error').className = 'hidden';
+      })
+      .catch(function() {
+        document.getElementById('error').className = '';
       })
     }
   </script>

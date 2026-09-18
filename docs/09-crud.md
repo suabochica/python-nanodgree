@@ -7,6 +7,13 @@ In this lesson, you will learn about the following topics, and also apply each t
 - Getting user data in Flask
 - Using AJAX to send data back to Flask
 - Using sessions in controllers
+- Implementing update functionality: update a todo item's completed state
+- Implementing delete functionality: remove a todo item
+- Model relationships between objects in SQL and SQLAlchemy
+- Setting up Foreign Key constraints
+
+Building CRUD on Lists of To-Do items
+Handling the special case of modeling many-to-many relationships
 
 So far, we've built up a lot of the conceptual foundation we'd need to understand how to do real-world web development across the stack. In these next series of lessons from now until the end of this course, we'll pivot to becoming very hands-on, building a fully functional application from start to end.
 
@@ -94,3 +101,28 @@ finally:
 - A session represents all interactions with the database and actually implements a “holding zone” for all the data objects that were affected during this time. They can be finalized (made permanent) by committing the changes, or rolling back if unwanted'
 - XMLHttpRequest (XHR) objects are used to interact with servers in order to get data from a URL (or page) without having to do an actual full page refresh. Web pages can update just a small part of a page without interrupting what the user is doing. XMLHttpRequest is used heavily in AJAX programming.
 - Migrations are code-based strategies that allow you to manipulate the schema or data in a database after it has already been created and has data in it. They are useful for recording changes, as well as providing a way to "rollback" changes. There can be several migration files "stacked" on top of one another in order.
+
+## Updating a resource
+
+An update involves setting the attributes of an existing object in the database.
+
+In SQL:
+
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+```
+
+In SQLAlchemy ORM:
+
+```py
+user = User.query.get(some_id)
+user.name = 'Some new name'
+db.session.commit()
+```
+
+In order to implement a checkbox that's based on the to-do items completed state, we're going to need to learn a little bit more about the Jinja templating engine, that's in Flask, and we're going to need to learn particularly about statements that allow us to do conditional if-statements.
+
+So using the documentation link below, we can see how to use the if statement in Jinja where we can do something like `iftodo.completed`, show this particular attribute in HTML.

@@ -1,26 +1,23 @@
 [project]
-name = "todoapp_crud"
+name = "fyyur"
 version = "0.1.0"
-description = "Dummy todo app for check CRUD concepts on python"
-readme = "README.md"
+description = "Add your description here"
 authors = [
     { name = "Sergio Benítez", email = "sergio.kun21@gmail.com" }
 ]
 requires-python = ">=3.14"
-
 dependencies = [
     "flask>=3.0",
+    "flask-moment>=1.0",
     "flask-sqlalchemy>=3.1",
-    "flask-migrate>=4.0",
-    "psycopg2-binary>=2.9",
-    "python-dotenv>=1.0",
+    "flask-wtf>=1.2",
+    "python-dateutil>=2.9",
+    "babel>=2.16",
+    "wtforms>=3.1",
 ]
 
-[dependency-groups]
-dev = ["pytest>=8.0"]
-
 [project.scripts]
-todoapp-crud = "todoapp_crud:main"
+fyyur = "fyyur:main"
 
 [build-system]
 requires = ["uv_build>=0.12.10,<0.13.0"]

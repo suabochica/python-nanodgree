@@ -109,7 +109,7 @@ A uv workspace lets you manage multiple interconnected Python packages inside a 
 - _Single Virtual Environment_: Commands use one shared .venv at the workspace root instead of separate environments for each sub-project.
 - _Local Sources_: Packages can depend on each other locally without needing manual rebuilds.
 
-)Most users on r/FastAPI agree that placing sub-packages inside a packages folder is the standard and most idiomatic layout.
+Most users on r/FastAPI agree that placing sub-packages inside a packages folder is the standard and most idiomatic layout.
 
 ## Basic Setup
 

@@ -153,3 +153,103 @@ Steps we'll implement:
 - Pressing the delete button sends a request that includes which to-do item to delete
 - The controller takes the user input, and notifies the models to delete the To-Do object by ID
 - On successful deletion by the models, the controller should notify the view to refresh the page and redirect to our homepage, showing a fresh fetch of all To-Do items to now exclude the removed
+
+## Modeling relationships
+
+So far, we've completed doing CRUD for a single model: a To Do item. The CRUD implementation patterns we've learned can apply to multiple models for any given web application, so long as those models do not have relationships between them. However, we'll often be implementing web apps with multiple models that have relationships with one another.
+
+The relationships between these models can determine if certain actions on one model should happen on other models, so that when something happens to one model, related model objects should also be affected (by being created, read, updated, or deleted).
+
+Examples are:
+
+- Removing a User's account should remove all of that user's photos, documents, etc.
+- Deleting a Discussion Thread should delete all of its comments.
+- Deactivating the profile of an Airbnb host should deactivate all of that host's listings.
+- Accessing a Blog Post should also access all of its comments.
+- Accessing an Airbnb host's profile should also access all of their listings.
+
+In order to handle CRUD across related models that can often have relationships with one another, we'll need to learn about how we model relationships, both reviewing relationship modeling in SQL and learning particularly about how we implement them in SQLAlchemy ORM.
+
+Let's put aside our To-Do app development for now to learn about mapping relationships between models. Once we've done that, we'll come back to our To-Do app to implement them.
+
+In relational databases, we can map relationships that occur
+
+- between tables
+- between rows across tables
+
+For example, if we have a table storing driver information and then another table storing vehicle information, we can establish a relationship, that says, a driver has many vehicles. From establishing that relationship, we can get certain information, such as the particular driver Amy, has two vehicles in particular; a 2018 Nissan Altima and 2007 Ninja 250 for example.
+
+We retrieve information across tables using foreign keys. So a foreign key is stored on what is known as the child table, vehicles in this case which retrieves the primary key in the parent table, mapping a relationship from parent to child. The foreign key is always stored in the child table and we say that a child object belongs to a parent objects through the foreign key that's stored on the child table. So, the way that we would query information about child records from a parent record or a parent records from a child record is using a select statement that includes a join
+
+![A driver has many vehicles](../images/manyvehciles.png)
+
+So, this particular select join statement. Answers the question, what is the make, model, and year of vehicles that the driver named Sarah has? Drivers being the parents, vehicles being the child, joining from child to parent on a foreign key that exists on the child.
+
+```sql
+SELECT make, model, year from vehicles
+  JOIN drivers
+  on vehicles.driver_id = driver_id
+  WHERE driver.name = 'Sarah';
+```
+
+SQLAlchemy configures the settings between model relationships once and generates JOIN statements for us whenever we need them.
+`db.relationship` is an interface offered in SQLAlchemy to provide and configure a mapped relationship between two models.
+`db.relationship` is defined on the parent model, and it sets; the name of its children (e.g. children), for example parent1.children; the name of a parent on a child using the `backref`, for example `child1.my_amazing_parent`.
+
+![db.relationship](../images/dbrelationship.png)
+
+When calling `child1.some_parent`, SQLAlchemy determines when we load the parent from the database.
+
+Why is it important to care about when we load parents?
+
+- Joins are expensive.
+- We should avoid having the user idling. Delays more than 150ms are noticeable, so milliseconds of performance matter!
+- We should make sure the joins happen during a time and place in the UX that doesn't negatively
+
+### Lazy loading
+
+Load needed joined data only as needed. Default in SQLAlchemy.
+
+- Pro: no initial wait time. Load only what you need.
+- Con: produces a join SQL call every time there is a request for a joined asset. Bad if you do this a lot.
+
+### Eager loading
+
+Load all needed joined data objects, all at once.
+
+- Pro: reduces further queries to the database. Subsequent SQL calls read existing data
+- Con: loading the joined table has a long upfront initial load time.
+
+lazy=True (lazy loading) is the default option in `db.relationship`.
+
+## Seting up Foreign keys
+
+In SQL,
+
+```sql
+CREATE TABLE vehicles (
+  id INTEGER PRIMARY_KEY,
+  make VARCHAR NOT NULL,
+  model VARCHAR NOT NULL,
+  year INTEGER NOT NULL,
+  driver_id REFERENCE drivers(id) # ForeignKey
+);
+```
+
+In SQLAlchemy,
+
+```py
+class Drive (db.model):
+  __tablename__ = 'drivers'
+  id = db.Column(db.Integer, primary_key=true)
+  ...
+  vehicles = db.relationship)'Vehicle',backref='drivers,lazy=true)
+
+
+class Vehicle (db.model):
+  __tablename__ = 'vehicles'
+  id = db.Column(db.Integer, primary_key=true)
+  make = db.Column(db.String(), nullable=False_
+  ...
+  driver_id = db.Column(db.Integer, db.ForeignKey('drivers.id'),nullable=False)
+```

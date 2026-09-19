@@ -14,6 +14,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import Form
 from flask_wtf.csrf import CSRFProtect
 
+from flask_migrate import Migrate
+
 from .extensions import db
 from .forms import *
 from .models import Venue, Artist, Show
@@ -27,6 +29,7 @@ app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('fyyur.config')
 db.init_app(app)
+migrate = Migrate(app, db)
 csrf = CSRFProtect(app)
 
 app.register_blueprint(venue_bp)

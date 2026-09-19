@@ -13,6 +13,7 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website = db.Column(db.String(120))
+    genres = db.Column(db.String(120))
     shows = db.relationship('Show', backref='venue', lazy=False)
 
     def __repr__(self):

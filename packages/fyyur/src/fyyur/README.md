@@ -9,7 +9,7 @@ Your job is to build out the data models to power the API endpoints for the Fyyu
 
 ## Overview
 
-This app is nearly complete. It is only missing one thing… real data! While the views and controllers are defined in this application, it is missing models and model interactions to be able to store retrieve, and update data from a database. By the end of this project, you should have a fully functioning site that is at least capable of doing the following, if not more, using a PostgreSQL database:
+This app is nearly complete. It is only missing one thing... real data! While the views and controllers are defined in this application, it is missing models and model interactions to be able to store retrieve, and update data from a database. By the end of this project, you should have a fully functioning site that is at least capable of doing the following, if not more, using a PostgreSQL database:
 
 * creating new venues, artists, and creating new shows.
 * searching for venues and artists.
@@ -20,79 +20,139 @@ We want Fyyur to be the next new platform that artists and musical venues can us
 ## Tech Stack (Dependencies)
 
 ### 1. Backend Dependencies
-Our tech stack will include the following:
- * **virtualenv** as a tool to create isolated Python environments
- * **SQLAlchemy ORM** to be our ORM library of choice
+
+ * **Python >= 3.14** and **Flask 3** as our server language and server framework
+ * **SQLAlchemy ORM** (via Flask-SQLAlchemy) to be our ORM library of choice
  * **PostgreSQL** as our database of choice
- * **Python3** and **Flask** as our server language and server framework
- * **Flask-Migrate** for creating and running schema migrations
-You can download and install the dependencies mentioned above using `pip` as:
-```
-pip install virtualenv
-pip install SQLAlchemy
-pip install postgres
-pip install Flask
-pip install Flask-Migrate
-```
-> **Note** - If we do not mention the specific version of a package, then the default latest stable package will be installed. 
+ * **psycopg 3** as the PostgreSQL adapter
+ * **Flask-WTF** / **WTForms** for form handling and CSRF protection
+ * **Flask-Moment** and **python-dateutil** for date/time handling
+ * **Babel** for locale-aware formatting
+
+All dependencies are declared in `pyproject.toml` and installed via [uv](https://docs.astral.sh/uv/).
 
 ### 2. Frontend Dependencies
-You must have the **HTML**, **CSS**, and **Javascript** with [Bootstrap 3](https://getbootstrap.com/docs/3.4/customize/) for our website's frontend. Bootstrap can only be installed by Node Package Manager (NPM). Therefore, if not already, download and install the [Node.js](https://nodejs.org/en/download/). Windows users must run the executable as an Administrator, and restart the computer after installation. After successfully installing the Node, verify the installation as shown below.
+
+The frontend uses **Bootstrap 3**, **jQuery**, **Moment.js**, and **FontAwesome**. Static assets are bundled under `static/` — no build step is required.
+
+## Project Structure
+
+The project uses a `src`-layout. All application code lives under `src/fyyur/`:
+
 ```
-node -v
-npm -v
+├── pyproject.toml              # Package metadata, dependencies (uv)
+└── src/
+    └── fyyur/
+        ├── __init__.py         # Package entry point
+        ├── app.py              # Flask app, models, routes, filters, error handlers
+        ├── config.py           # SECRET_KEY, DEBUG, SQLALCHEMY_DATABASE_URI
+        ├── forms.py            # WTForms: VenueForm, ArtistForm, ShowForm
+        ├── static/
+        │   ├── css/            # Bootstrap 3 + custom stylesheets
+        │   ├── js/             # jQuery, Moment.js, Bootstrap JS, custom
+        │   ├── fonts/          # FontAwesome webfonts
+        │   └── img/            # Front-page splash image
+        └── templates/
+            ├── errors/         # 404.html, 500.html
+            ├── forms/          # new_venue, new_artist, new_show, edit_*
+            ├── layouts/        # main.html, form.html (shared chrome)
+            └── pages/          # Home, venues, artists, shows, search, detail
 ```
-Install [Bootstrap 3](https://getbootstrap.com/docs/3.3/getting-started/) for the website's frontend:
+
+Key file roles:
+
+| File | Role |
+|---|---|
+| `app.py` | Flask app init, SQLAlchemy models, all routes/controllers, `format_datetime` Jinja filter, error handlers, logging |
+| `config.py` | `SECRET_KEY`, `DEBUG`, `SQLALCHEMY_DATABASE_URI` (defaults to local Postgres, overridable via `FYYUR_DATABASE_URI` env var) |
+| `forms.py` | `VenueForm`, `ArtistForm`, `ShowForm` — state selects (50 US states + DC), genre multi-select (19 genres), seeking fields |
+| `templates/layouts/main.html` | Master layout — navbar with contextual search, flash messages, footer, global scripts |
+| `templates/pages/` | Page-level views (extends main layout) |
+| `templates/forms/` | Create/edit forms for venues, artists, shows |
+
+> **Note:** `fabfile.py` is a legacy Fabric deployment script (Heroku) and is no longer functional. `error.log` is written only when `DEBUG=False`.
+
+## Getting Started
+
+### Prerequisites
+
+* **Python >= 3.14**
+* **[uv](https://docs.astral.sh/uv/getting-started/installation/)** package manager
+* **Docker** (for running PostgreSQL locally)
+
+### 1. Start the PostgreSQL database
+
+A Docker container is the easiest way to get a local Postgres running with no extra configuration:
+
+```bash
+docker run -d \
+  --name fyyur-postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=fyyurdb \
+  -p 5433:5432 \
+  postgres:16-alpine
 ```
-npm init -y
-npm install bootstrap@3
+
+This creates a container named `fyyur-postgres` on port **5433** (to avoid clashing with any system Postgres on 5432).
+
+To stop it later:
+```bash
+docker stop fyyur-postgres
 ```
 
+To start it again after a reboot:
+```bash
+docker start fyyur-postgres
+```
 
-## Main Files: Project Structure
+### 2. Install dependencies
 
-  ```sh
-  ├── README.md
-  ├── app.py *** the main driver of the app. Includes your SQLAlchemy models.
-                    "python app.py" to run after installing dependencies
-  ├── config.py *** Database URLs, CSRF generation, etc
-  ├── error.log
-  ├── forms.py *** Your forms
-  ├── requirements.txt *** The dependencies we need to install with "pip3 install -r requirements.txt"
-  ├── static
-  │   ├── css 
-  │   ├── font
-  │   ├── ico
-  │   ├── img
-  │   └── js
-  └── templates
-      ├── errors
-      ├── forms
-      ├── layouts
-      └── pages
-  ```
+From the **project root** (`packages/fyyur/`):
 
-Overall:
-* Models are located in the `MODELS` section of `app.py`.
-* Controllers are also located in `app.py`.
-* The web frontend is located in `templates/`, which builds static assets deployed to the web server at `static/`.
-* Web forms for creating data are located in `form.py`
+```bash
+uv sync
+```
 
+This reads `pyproject.toml` and installs everything into a local `.venv`.
 
-Highlight folders:
-* `templates/pages` -- (Already complete.) Defines the pages that are rendered to the site. These templates render views based on data passed into the template’s view, in the controllers defined in `app.py`. These pages successfully represent the data to the user, and are already defined for you.
-* `templates/layouts` -- (Already complete.) Defines the layout that a page can be contained in to define footer and header code for a given page.
-* `templates/forms` -- (Already complete.) Defines the forms used to create new artists, shows, and venues.
-* `app.py` -- (Missing functionality.) Defines routes that match the user’s URL, and controllers which handle data and renders views to the user. This is the main file you will be working on to connect to and manipulate the database and render views with data to the user, based on the URL.
-* Models in `app.py` -- (Missing functionality.) Defines the data models that set up the database tables.
-* `config.py` -- (Missing functionality.) Stores configuration variables and instructions, separate from the main application code. This is where you will need to connect to the database.
+### 3. Run the development server
 
+```bash
+uv run flask --app fyyur.app run --debug
+```
 
-Instructions
------
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
+
+### 4. Verify the connection
+
+```bash
+uv run python -c "from fyyur.app import db; print(db.engine.url)"
+# postgresql+psycopg://postgres:postgres@localhost:5433/fyyurdb
+```
+
+### Database connection details
+
+| Key | Value |
+|---|---|
+| Host | `localhost` |
+| Port | `5433` |
+| User | `postgres` |
+| Password | `postgres` |
+| Database | `fyyurdb` |
+| Driver | `psycopg` (psycopg 3) |
+
+Override the default URI by setting the `FYYUR_DATABASE_URI` environment variable:
+
+```bash
+export FYYUR_DATABASE_URI='postgresql+psycopg://user:pass@host:port/dbname'
+```
+
+## Development Setup (UDACITY)
+
+> The sections below are carried over from the original Udacity FSND starter and have not been updated to match the current project layout.
 
 1. Understand the Project Structure (explained above) and where important files are located.
-2. Build and run local development following the Development Setup steps below.
+2. Build and run local development following the Getting Started section above.
 3. Fill in the missing functionality in this application: this application currently pulls in fake data, and needs to now connect to a real database and talk to a real backend.
 4. Fill out every `TODO` section throughout the codebase. We suggest going in order of the following:
     * Connect to a database in `config.py`. A project submission that uses a local database connection is fine.
@@ -103,16 +163,16 @@ Instructions
     * Serve venue and artist detail pages, powering the `<venue|artist>/<id>` endpoints that power the detail pages.
 
 #### Data Handling with `Flask-WTF` Forms
+
 The starter codes use an interactive form builder library called [Flask-WTF](https://flask-wtf.readthedocs.io/). This library provides useful functionality, such as form validation and error handling. You can peruse the Show, Venue, and Artist form builders in `forms.py` file. The WTForms are instantiated in the `app.py` file. For example, in the `create_shows()` function, the Show form is instantiated from the command: `form = ShowForm()`. To manage the request from Flask-WTF form, each field from the form has a `data` attribute containing the value from user input. For example, to handle the `venue_id` data from the Venue form, you can use: `show = Show(venue_id=form.venue_id.data)`, instead of using `request.form['venue_id']`.
 
-Acceptance Criteria
------
+## Acceptance Criteria
 
 1. The web app should be successfully connected to a PostgreSQL database. A local connection to a database on your local computer is fine.
 2. There should be no use of mock data throughout the app. The data structure of the mock data per controller should be kept unmodified when satisfied by real data.
 3. The application should behave just as before with mock data, but now uses real data from a real backend server, with real search functionality. For example:
   * when a user submits a new artist record, the user should be able to see it populate in /artists, as well as search for the artist by name and have the search return results.
-  * I should be able to go to the URL `/artist/<artist-id>` to visit a particular artist’s page using a unique ID per artist, and see real data about that particular artist.
+  * I should be able to go to the URL `/artist/<artist-id>` to visit a particular artist's page using a unique ID per artist, and see real data about that particular artist.
   * Venues should continue to be displayed in groups by city and state.
   * Search should be allowed to be partial string matching and case-insensitive.
   * Past shows versus Upcoming shows should be distinguished in Venue and Artist pages.
@@ -133,57 +193,3 @@ Looking to go above and beyond? This is the right section for you! Here are some
 * Implement Search Artists by City and State, and Search Venues by City and State. Searching by "San Francisco, CA" should return all artists or venues in San Francisco, CA.
 
 Best of luck in your final project! Fyyur depends on you!
-
-
-## Development Setup
-1. **Download the project starter code locally**
-```
-git clone https://github.com/udacity/FSND.git
-cd FSND/projects/01_fyyur/starter_code 
-```
-
-2. **Create an empty repository in your Github account online. To change the remote repository path in your local repository, use the commands below:**
-```
-git remote -v 
-git remote remove origin 
-git remote add origin <https://github.com/<USERNAME>/<REPO_NAME>.git>
-git branch -M master
-```
-Once you have finished editing your code, you can push the local repository to your Github account using the following commands.
-```
-git add . --all   
-git commit -m "your comment"
-git push -u origin master
-```
-
-3. **Initialize and activate a virtualenv using:**
-```
-python -m virtualenv env
-source env/bin/activate
-```
->**Note** - In Windows, the `env` does not have a `bin` directory. Therefore, you'd use the analogous command shown below:
-```
-source env/Scripts/activate
-```
-
-4. **Install the dependencies:**
-```
-pip install -r requirements.txt
-```
-
-5. **Run the development server:**
-```
-export FLASK_APP=myapp
-export FLASK_ENV=development # enables debug mode
-python3 app.py
-```
-
-6. **Verify on the Browser**<br>
-Navigate to project homepage [http://127.0.0.1:5000/](http://127.0.0.1:5000/) or [http://localhost:5000](http://localhost:5000) 
-
-## Troubleshooting:
-- If you encounter any dependency errors, please ensure that you are using Python 3.9 or lower.
-- If you are still facing the dependency errors, follow the given commands:
-  - `using pip install --upgrade flask-moment`
-  - `Using pip install Werkzeug==2.0.0`
-  - `Using pip uninstall Flask and then pip install flask==2.0.3`

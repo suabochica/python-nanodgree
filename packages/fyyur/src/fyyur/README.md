@@ -1,5 +1,4 @@
-Fyyur
------
+# Fyyur
 
 ## Introduction
 
@@ -105,6 +104,12 @@ To start it again after a reboot:
 docker start fyyur-postgres
 ```
 
+To enable a interactive session run the `psql` on the docker container:
+
+```bash
+docker exec -it fyyur-postgres psql -U postgres -d fyyurdb
+```
+
 ### 2. Install dependencies
 
 From the **project root** (`packages/fyyur/`):
@@ -193,3 +198,25 @@ Looking to go above and beyond? This is the right section for you! Here are some
 * Implement Search Artists by City and State, and Search Venues by City and State. Searching by "San Francisco, CA" should return all artists or venues in San Francisco, CA.
 
 Best of luck in your final project! Fyyur depends on you!
+
+## Demo
+
+![demo](./static/img/demo.gif)
+
+To check the tables please run:
+
+```bash
+docker exec fyyur-postgres psql -U postgres -d fyyurdb -c "SELECT * FROM \"Artist\";"
+```
+
+You will get:
+
+```
+ id |       name        |     city      | state |    phone     |     genres     |                                                              image_link                                                               |                 facebook_link                 | website
+----+-------------------+---------------+-------+--------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+---------
+  2 | Matt Quevedo      | New York      | NY    | 300-400-5000 | Jazz           | https://images.unsplash.com/photo-1495223153807-b916f75de8c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80 | https://www.facebook.com/mattquevedo923251523 |
+  3 | The Wild Sax Band | San Francisco | CA    | 432-325-5432 | Jazz,Classical | https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80    |                                               |
+  1 | Guns N Plants     | San Francisco | CA    | 326-123-5000 | Classical      | https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80    | https://www.facebook.com/GunsNPetals          |
+  4 | Alcolyricoz       | Miamo         | OR    | 123456765    | Alternative    |                                                                                                                                       | http://facebook.com/alcolyricoz               |
+
+```

@@ -1,0 +1,26 @@
+[project]
+name = "bookshelf-app"
+version = "0.1.0"
+description = "Books CRUD REST API with Flask, Flask-SQLAlchemy and Flask-CORS"
+readme = "README.md"
+authors = [
+    { name = "Sergio Benítez", email = "sergio.kun21@gmail.com" }
+]
+requires-python = ">=3.14"
+
+dependencies = [
+    "flask>=3.0",
+    "flask-sqlalchemy>=3.1",
+    "flask-cors>=4.0",
+    "psycopg2-binary>=2.9",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+bookshelf-app = "bookshelf_app:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"

@@ -4,6 +4,7 @@ requires-python = ">=3.14"
 
 [manifest]
 members = [
+    "bookshelf-app",
     "fyyur",
     "plants-app",
     "python-nanodgree",
@@ -42,6 +43,33 @@ sdist = { url = "https://files.pythonhosted.org/packages/21/28/9b3f50ce0e0485151
 wheels = [
     { url = "https://files.pythonhosted.org/packages/10/cb/f2ad4230dc2eb1a74edf38f1a38b9b52277f75bef262d8908e60d957e13c/blinker-1.9.0-py3-none-any.whl", hash = "sha256:ba0efaa9080b619ff2f3459d1d500c57bddea4a6b424b60a91141db6fd2f08bc", size = 8458, upload-time = "2024-11-08T17:25:46.184Z" },
 ]
+
+[[package]]
+name = "bookshelf-app"
+version = "0.1.0"
+source = { editable = "packages/bookshelf_app" }
+dependencies = [
+    { name = "flask" },
+    { name = "flask-cors" },
+    { name = "flask-sqlalchemy" },
+    { name = "psycopg2-binary" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "flask", specifier = ">=3.0" },
+    { name = "flask-cors", specifier = ">=4.0" },
+    { name = "flask-sqlalchemy", specifier = ">=3.1" },
+    { name = "psycopg2-binary", specifier = ">=2.9" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.0" }]
 
 [[package]]
 name = "click"

@@ -1,13 +1,17 @@
 import os
 from sqlalchemy import Column, String, Integer, Boolean, create_engine
 from flask_sqlalchemy import SQLAlchemy
-import json
 from sqlalchemy.sql.schema import PrimaryKeyConstraint
 
 database_name = "plantsdb"
-# Feel free to remove the password argument from the below format() method
-database_path = "postgresql://{}:{}@{}/{}".format(
-    "postgres", "", "localhost:5432", database_name
+database_user = "postgres"
+database_host = "localhost:5432"
+database_password = os.environ.get("PLANTS_DB_PASSWORD", "")
+database_path = "postgresql://{user}:{pwd}@{host}/{name}".format(
+    user=database_user,
+    pwd=database_password,
+    host=database_host,
+    name=database_name,
 )
 db = SQLAlchemy()
 
@@ -17,7 +21,8 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    db.create_all()
+    with app.app_context():
+        db.create_all()
 
 
 """Plant class"""

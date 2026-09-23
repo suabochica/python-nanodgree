@@ -31,7 +31,8 @@ def paginate_books(request, selection):
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app)
+    db_path = test_config.get("SQLALCHEMY_DATABASE_URI") if test_config else None
+    setup_db(app, db_path)
     CORS(app)
 
     # CORS Headers
@@ -47,6 +48,25 @@ def create_app(test_config=None):
 
     @app.route("/books")
     def retrieve_books():
+        search = request.args.get("search", None)
+        if search:
+            selection = (
+                Book.query.filter(
+                    (Book.title.ilike(f"%{search}%"))
+                    | (Book.author.ilike(f"%{search}%"))
+                )
+                .order_by(Book.id)
+                .all()
+            )
+            current_books = paginate_books(request, selection)
+            return jsonify(
+                {
+                    "success": True,
+                    "books": current_books,
+                    "total_books": len(selection),
+                }
+            )
+
         selection = Book.query.order_by(Book.id).all()
         current_books = paginate_books(request, selection)
 
@@ -112,24 +132,79 @@ def create_app(test_config=None):
         new_title = body.get("title", None)
         new_author = body.get("author", None)
         new_rating = body.get("rating", None)
+        search = body.get("search", None)
 
         try:
-            book = Book(title=new_title, author=new_author, rating=new_rating)
-            book.insert()
+            if search:
+                selection = Book.query.order_by(Book.id).filter(
+                    Book.title.ilike("%{}%".format(search))
+                )
+                current_books = paginate_books(request, selection)
 
-            selection = Book.query.order_by(Book.id).all()
-            current_books = paginate_books(request, selection)
+                return jsonify(
+                    {
+                        "succes": True,
+                        "books": current_books,
+                        "total_books": len(selection.all()),
+                    }
+                )
+            else:
+                book = Book(title=new_title, author=new_author, rating=new_rating)
+                book.insert()
 
-            return jsonify(
-                {
-                    "success": True,
-                    "created": book.id,
-                    "books": current_books,
-                    "total_books": len(Book.query.all()),
-                }
-            )
+                selection = Book.query.order_by(Book.id).all()
+                current_books = paginate_books(request, selection)
+
+                return jsonify(
+                    {
+                        "success": True,
+                        "created": book.id,
+                        "books": current_books,
+                        "total_books": len(Book.query.all()),
+                    }
+                )
 
         except:
             abort(422)
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify(
+            {
+                "success": False,
+                "error": 404,
+                "message": "Resource not found",
+            }
+        ), 404
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify(
+            {
+                "success": False,
+                "error": 422,
+                "message": "Unprocessable",
+            }
+        ), 422
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify(
+            {
+                "success": False,
+                "error": 400,
+                "message": "Bad Request",
+            }
+        ), 400
+
+    @app.errorhandler(405)
+    def not_allowed(error):
+        return jsonify(
+            {
+                "success": False,
+                "error": 405,
+                "message": "Method Not Allowed",
+            }
+        ), 405
 
     return app

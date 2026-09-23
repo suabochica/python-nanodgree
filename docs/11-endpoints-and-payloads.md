@@ -84,5 +84,30 @@ In order for the requests to be processed properly, CORS utilizes headers to spe
 - Access-Control-Allow-Headers
     - List of http request header values the server will allow, particularly useful if you use any custom headers
 
+## Flask Error Handling
+When you use the abort method, the default response is not digestible for the client or user.
 
+```
+abort(404)
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
+
+```
+In addition, we want to ensure all of our server responses have consistent formatting and that we provide adequate information to the client regarding the error. The @app.errorhandler decorator allows you to specify the behavior for expected errors. When using this decorator take into consideration:
+
+- Passing the status code or Python error as an argument to the decorator
+- Logical naming of the function handler
+- Consistent formatting and messaging of the JSON object response
+
+```py
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False, 
+        "error": 404,
+        "message": "Not found"
+        }), 404
+```

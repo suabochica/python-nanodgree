@@ -14,6 +14,10 @@ bookshelf_app/
 │   └── bookshelf_app/
 │       ├── __init__.py    # create_app() factory + main() entry point
 │       └── models.py      # Book model and setup_db()
+├── tests/                 # unittest TestCase suites
+│   ├── __init__.py
+│   ├── test_app.py        # HTTP route tests via Flask test_client
+│   └── test_models.py     # Book model unit tests
 └── template/              # React client (create-react-app)
 ```
 
@@ -67,7 +71,7 @@ Press CTRL+C to quit
 
 | Method   | Path                  | Description                |
 | -------- | --------------------- | -------------------------- |
-| `GET`    | `/books`              | List books (paginated, 8/page) |
+| `GET`    | `/books`              | List books (paginated, 8/page). Optional `?search=<term>` filters by title or author. |
 | `POST`   | `/books`              | Create a new book          |
 | `PATCH`  | `/books/<id>`         | Update a book's rating     |
 | `DELETE` | `/books/<id>`         | Delete a book              |
@@ -85,6 +89,35 @@ Expected output (empty database):
 ```
 
 Status: `200 OK` once at least one book exists, otherwise `404`.
+
+### `GET /books?search=<term>`
+
+Case-insensitive substring search against `title` **or** `author`. Always
+returns `200` (an empty result set is a valid answer, distinct from "no
+books at all" which 404s).
+
+```bash
+curl -s "http://127.0.0.1:5000/books?search=Novel" | python3 -m json.tool
+```
+
+Expected output (with matching books seeded):
+
+```json
+{
+    "books": [
+        {
+            "author": "Author One",
+            "id": 1,
+            "rating": 8,
+            "title": "A Novel Beginning"
+        }
+    ],
+    "success": true,
+    "total_books": 1
+}
+```
+
+`total_books` is the count of **matches**, not the total in the DB.
 
 ## Seeding sample data
 
@@ -197,3 +230,41 @@ Then open **http://localhost:3000** in your browser.
 ```bash
 pkill -f "react-scripts/scripts/start"
 ```
+
+## Testing
+
+Unit tests live in `tests/` (sibling of `src/`, **not** inside it) and
+use only the standard library `unittest` package — no third-party test
+runner required. They run `unittest.TestCase` subclasses, so `pytest`
+will also discover and run them transparently.
+
+Each test gets a fresh **in-memory SQLite** database via the
+`test_config` argument of `create_app()`, so no PostgreSQL is needed to
+run the suite.
+
+```bash
+# stdlib unittest (always available)
+uv run python -m unittest discover -s packages/bookshelf_app/tests -v
+
+# pytest (already in [dependency-groups] dev)
+uv run pytest packages/bookshelf_app/tests -v
+```
+
+Expected output:
+
+```
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.10s
+
+OK
+```
+
+### What's covered
+
+- `tests/test_app.py` — HTTP routes through `Flask.test_client()`:
+  empty list, POST create, GET list, PATCH rating, DELETE, plus the
+  current behavior of error paths (some assertions document known app
+  bugs and link them to the `bare except:` clauses in `src/bookshelf_app/__init__.py`).
+- `tests/test_models.py` — `Book` model in isolation: `format()`,
+  `insert()`, `update()`, `delete()` against an in-memory DB.

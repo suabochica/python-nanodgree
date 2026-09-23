@@ -150,3 +150,20 @@ Test-Driven Development (or TDD) is a software development paradigm used very co
 - Repeat - write your next test.
 
 Often while pair programming, one partner will write the test and the other will write the executable code, after which the partner will switch. This process is helpful for checking assumptions about behavior and making sure all expected behavior is captured.
+
+## Recap
+
+At this point, you now know how to build an API that:
+
+- Handles multiple kinds of requests
+- Can handle a request body
+- Can format both successful responses and error responses
+
+And in this lesson, you also learned how to:
+
+- Test your API using Unittest
+- Build your API using Test-Driven Development (TDD)
+
+By taking this approach in your future development, you'll be able to produce applications in a way that catches issues prior to putting them in front of the user, and in a way that makes it easier to maintain that quality as the app grows.
+
+Next, we'll be looking at how to make your API usable by others, through writing API documentation. Onwards!

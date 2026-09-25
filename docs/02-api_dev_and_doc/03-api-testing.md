@@ -30,7 +30,7 @@ The order of operations for app development should always be:
 
 Step 2 is essential to ensuring the application is production-ready and time-to-production is used efficiently.
 
-![App Development Timeline](../images/app-dev-timeline.png)
+![App Development Timeline](../../images/app-dev-timeline.png)
 
 
 API testing is done to ensure that the API functions as expected and provides accurate and consistent results. APIs (Application Programming Interfaces) are used to enable communication between different software systems or components.

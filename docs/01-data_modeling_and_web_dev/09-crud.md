@@ -181,7 +181,7 @@ For example, if we have a table storing driver information and then another tabl
 
 We retrieve information across tables using foreign keys. So a foreign key is stored on what is known as the child table, vehicles in this case which retrieves the primary key in the parent table, mapping a relationship from parent to child. The foreign key is always stored in the child table and we say that a child object belongs to a parent objects through the foreign key that's stored on the child table. So, the way that we would query information about child records from a parent record or a parent records from a child record is using a select statement that includes a join
 
-![A driver has many vehicles](../images/manyvehciles.png)
+![A driver has many vehicles](../../images/manyvehciles.png)
 
 So, this particular select join statement. Answers the question, what is the make, model, and year of vehicles that the driver named Sarah has? Drivers being the parents, vehicles being the child, joining from child to parent on a foreign key that exists on the child.
 
@@ -196,7 +196,7 @@ SQLAlchemy configures the settings between model relationships once and generate
 `db.relationship` is an interface offered in SQLAlchemy to provide and configure a mapped relationship between two models.
 `db.relationship` is defined on the parent model, and it sets; the name of its children (e.g. children), for example parent1.children; the name of a parent on a child using the `backref`, for example `child1.my_amazing_parent`.
 
-![db.relationship](../images/dbrelationship.png)
+![db.relationship](../../images/dbrelationship.png)
 
 When calling `child1.some_parent`, SQLAlchemy determines when we load the parent from the database.
 

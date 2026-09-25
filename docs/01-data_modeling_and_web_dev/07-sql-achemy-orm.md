@@ -30,5 +30,5 @@ When a statement has been flushed already, SQLAlchemy knows not to do the work a
 
 The next images is a summary of the explanation exposed in this file:
 
-![Object LifeCycle](../images/objectlc.png
+![Object LifeCycle](../../images/objectlc.png
 )

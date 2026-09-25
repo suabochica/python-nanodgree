@@ -22,7 +22,7 @@ A Migration is a file that keeps track of changes to our database schema (struct
 
 The next image illustrate how migrations scripts are coordinated to upgrade and schema.
 
-![Migrations](../images/migrations.png)
+![Migrations](../../images/migrations.png)
 
 A common case to use migrations could be: Imagine you are a database administrator for a university. You have a large database of student records, but the government has mandated a new requirement for vaccinations for all students. This column must be added to the database. Because the database is already live, this allows you to alter both the schema as well as repopulate with default data. By using the migration tool, should this requirement ever become not required, we could easily downgrade. It is useful for auditing as there is a record.
 

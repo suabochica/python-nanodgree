@@ -69,7 +69,7 @@ This is not, however, to say that it is really an error. It is behaving exactly 
 
 If you're sending any requests beyond very simple GET or POST requests, then before your actual request is sent, the browser sends a preflight OPTIONS request to the server. If CORS is not enabled, then the browser will not respond properly and the actual request will not be sent.
 
-![CORS request](../images/cors-request.png)
+![CORS request](../../images/cors-request.png)
 
 ### CORS Headers
 

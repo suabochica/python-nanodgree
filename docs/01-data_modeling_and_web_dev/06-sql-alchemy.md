@@ -31,7 +31,7 @@ Below a list of some features offered by SQLAlchemy.
 
 The diagram below can give you insight into where SQL Alchemy and ORM are in the big picture.
 
-![SQLAlchemy diagram](../images/alchorm.png)
+![SQLAlchemy diagram](../../images/alchorm.png)
 
 ### Takeaways
 
@@ -54,7 +54,7 @@ Here's my opinion on interacting with databases using good design practice.
 
 Next, we'll go over every layer of abstraction in SQLAlchemy and what they offer.
 
-![SQL layers](../images/sqla.png)
+![SQL layers](../../images/sqla.png)
 
 ## The Dialect
 
@@ -101,7 +101,7 @@ Moreover, SQLAlchemy is split into two libraries:
 
 The next image summarizes the layer of abstraction of SQLAlchemy:
 
-![SQLAlchemy Layer of Abstraction](../images/sqlalchemy-layers-of-abstraction.png)
+![SQLAlchemy Layer of Abstraction](../../images/sqlalchemy-layers-of-abstraction.png)
 
 ## Mapping Between Tables and classes
 
@@ -141,7 +141,7 @@ CREATE TABLE humans (
 
 In order to create the records for Sarah and Bob, we would simply list Sarah and Bob and their values for every column, as rows within the table. So it's easy to see that the way that we instantiate a class in Python, or in other languages, is very similar to the way that we would instantiate a table in a Relational Database System. The way that we would create instances of that class or objects of that class, which have different attributes and different values for each of those attributes, is a very similar process, to the way that we would create rows within the table, that will have different values for every column.
 
-![Classes and database tables are similar](../images/pysql.png)
+![Classes and database tables are similar](../../images/pysql.png)
 
 A column maps to an attribute on a class. The table schema matches to the class definition of the class as a whole, and rows within a table, match to records or objects that are instances of a class. So the takeaways are, tables mapped to classes, table records mapped to class objects, and table columns mapped to the attributes within that class.
 
@@ -166,4 +166,4 @@ In this lesson, we introduced SQL Alchemy, theoretically as well as in practice.
 
 The next pyramid summarize the SQLAlchemy contents:
 
-![SQLAlchemy layers](../images/sqlalchemy-layers.png)
+![SQLAlchemy layers](../../images/sqlalchemy-layers.png)

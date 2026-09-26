@@ -1,0 +1,25 @@
+[project]
+name = "flask-auth0"
+version = "0.1.0"
+description = "Demo Flask API with Auth0 RS256 JWT bearer-token authentication"
+readme = "README.md"
+authors = [
+    { name = "Sergio Benítez", email = "sergio.kun21@gmail.com" }
+]
+requires-python = ">=3.14"
+
+dependencies = [
+    "flask>=3.0",
+    "flask-cors>=4.0",
+    "python-jose[cryptography]>=3.3",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+flask-auth0 = "flask_auth0:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"

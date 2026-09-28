@@ -236,3 +236,15 @@ def headers(jwt):
     print(jwt)
     return "not implemented"
 ```
+
+## Recap
+
+In this lesson, we've discussed the following topics:
+
+- Common authentication method
+- Alternative authentication methods
+- Third-party auth systems
+- Implementing Auth0
+- JSON web token (JWT) - data structure and validation
+- Local storage
+- Sending tokens

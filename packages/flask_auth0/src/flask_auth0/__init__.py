@@ -145,6 +145,23 @@ def requires_auth(f):
     return wrapper
 
 
+def check_permissions(permission, payload):
+    if "permissions" not in payload:
+        raise AuthError(
+            {
+                "code": "invalid_claims",
+                "description": "Permissions not included in JWT.",
+            },
+            400,
+        )
+
+    if permission not in payload["permissions"]:
+        raise AuthError(
+            {"code": "unauthorized", "description": "Permission not found."}, 403
+        )
+    return True
+
+
 # ---------------------------------------------------------------------------
 # App factory
 # ---------------------------------------------------------------------------
@@ -157,9 +174,7 @@ def create_app(test_config=None):
         response.headers.add(
             "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
         )
-        response.headers.add(
-            "Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS"
-        )
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
         return response
 
     @app.route("/headers")

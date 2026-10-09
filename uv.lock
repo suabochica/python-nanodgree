@@ -11,6 +11,7 @@ members = [
     "python-nanodgree",
     "todoapp-crud",
     "todoapp-migrations",
+    "trivia",
 ]
 
 [[package]]
@@ -764,6 +765,33 @@ requires-dist = [
     { name = "flask-sqlalchemy", specifier = ">=3.1" },
     { name = "psycopg2-binary", specifier = ">=2.9" },
 ]
+
+[[package]]
+name = "trivia"
+version = "0.1.0"
+source = { editable = "packages/trivia" }
+dependencies = [
+    { name = "flask" },
+    { name = "flask-cors" },
+    { name = "flask-sqlalchemy" },
+    { name = "psycopg2-binary" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "flask", specifier = ">=3.0" },
+    { name = "flask-cors", specifier = ">=4.0" },
+    { name = "flask-sqlalchemy", specifier = ">=3.1" },
+    { name = "psycopg2-binary", specifier = ">=2.9" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.0" }]
 
 [[package]]
 name = "typing-extensions"

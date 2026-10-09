@@ -1,0 +1,16 @@
+# OS / editor cruft
+.vscode
+__pycache__
+__pycache__/
+*.pyc
+
+# Virtualenvs
+venv
+.venv
+env/
+
+# Node / React
+frontend/node_modules/
+
+# Environment
+.env

@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, abort, jsonify, request
+from flask import Blueprint, Flask, abort, jsonify, request
 from flask_cors import CORS
 
 from .models import Category, Question, db, setup_db
@@ -43,7 +43,9 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route("/categories")
+    api = Blueprint("api", __name__, url_prefix="/api")
+
+    @api.route("/categories")
     def get_categories():
         categories = Category.query.all()
 
@@ -60,7 +62,7 @@ def create_app(test_config=None):
         except:
             abort(404)
 
-    @app.route("/questions")
+    @api.route("/questions")
     def get_questions():
         questions = Question.query.order_by(Question.id).all()
         categories = Category.query.order_by(Category.id).all()
@@ -82,7 +84,7 @@ def create_app(test_config=None):
             }
         )
 
-    @app.route("/questions/<int:question_id>", methods=["GET", "DELETE"])
+    @api.route("/questions/<int:question_id>", methods=["GET", "DELETE"])
     def question_detail(question_id):
         question = Question.query.filter(Question.id == question_id).one_or_none()
 
@@ -105,7 +107,7 @@ def create_app(test_config=None):
 
         return jsonify({"success": True, "question": question.format()})
 
-    @app.route("/questions", methods=["POST"])
+    @api.route("/questions", methods=["POST"])
     def create_question():
         body = request.get_json()
 
@@ -158,7 +160,7 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    @app.route("/categories/<int:category_id>/questions")
+    @api.route("/categories/<int:category_id>/questions")
     def get_questions_by_category(category_id):
         try:
             category = Category.query.filter(Category.id == category_id).one_or_none()
@@ -184,7 +186,7 @@ def create_app(test_config=None):
         except:
             abort(404)
 
-    @app.route("/quizzes", methods=["POST"])
+    @api.route("/quizzes", methods=["POST"])
     def play_quiz():
         body = request.get_json()
         previous_questions = body.get("previous_questions", [])
@@ -243,6 +245,8 @@ def create_app(test_config=None):
             ),
             500,
         )
+
+    app.register_blueprint(api)
 
     return app
 

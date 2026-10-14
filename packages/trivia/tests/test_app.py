@@ -93,7 +93,7 @@ class TriviaTestCase(unittest.TestCase):
     # ---- categories --------------------------------------------------------
 
     def test_get_categories(self):
-        res = self.client.get("/categories")
+        res = self.client.get("/api/categories")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -102,7 +102,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["total_categories"], 6)
 
     def test_get_non_existent_category_returns_404(self):
-        res = self.client.get("/categories/9999/questions")
+        res = self.client.get("/api/categories/9999/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -112,7 +112,7 @@ class TriviaTestCase(unittest.TestCase):
     # ---- questions ---------------------------------------------------------
 
     def test_get_questions_paginates_first_ten(self):
-        res = self.client.get("/questions")
+        res = self.client.get("/api/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -122,7 +122,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data["questions"]), 10)
 
     def test_get_non_existent_question_returns_404(self):
-        res = self.client.get("/questions/9999")
+        res = self.client.get("/api/questions/9999")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -130,7 +130,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "Resource Not Found")
 
     def test_get_questions_by_category(self):
-        res = self.client.get("/categories/1/questions")
+        res = self.client.get("/api/categories/1/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -139,7 +139,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["current_category"], "Science")
 
     def test_create_question_returns_201(self):
-        res = self.client.post("/questions", json=self.NEW_QUESTION)
+        res = self.client.post("/api/questions", json=self.NEW_QUESTION)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 201)
@@ -148,7 +148,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data["questions"]))
 
     def test_search_question(self):
-        res = self.client.post("/questions", json=self.SEARCH_TERM)
+        res = self.client.post("/api/questions", json=self.SEARCH_TERM)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -156,7 +156,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data["questions"]), 1)
 
     def test_delete_question(self):
-        res = self.client.delete("/questions/23")
+        res = self.client.delete("/api/questions/23")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -168,7 +168,7 @@ class TriviaTestCase(unittest.TestCase):
     # ---- quizzes -----------------------------------------------------------
 
     def test_play_quiz_excludes_previous_questions(self):
-        res = self.client.post("/quizzes", json=self.QUIZ_DATA)
+        res = self.client.post("/api/quizzes", json=self.QUIZ_DATA)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)

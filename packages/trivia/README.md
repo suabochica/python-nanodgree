@@ -19,7 +19,7 @@ trivia/
 │   ├── __init__.py
 │   ├── test_app.py              # HTTP route tests via Flask test_client
 │   └── test_models.py           # Question / Category model unit tests
-└── frontend/                    # React client (create-react-app)
+└── frontend/                    # React client (Vite + React 19)
 ```
 
 ## Prerequisites
@@ -27,8 +27,7 @@ trivia/
 - PostgreSQL running on `localhost:5432`
 - `uv` for workspace management
 - A `postgres` role with a known password
-- Node.js 16+ and npm (for the React client — `package.json` already
-  pins `NODE_OPTIONS=--openssl-legacy-provider` for Node 17+)
+- Node.js 18+ and npm (for the React client — React 19 requires Node 18+)
 
 ## Setup
 
@@ -84,13 +83,13 @@ this workspace, so stop the others first.
 
 | Method   | Path                                  | Description                            |
 | -------- | ------------------------------------- | -------------------------------------- |
-| `GET`    | `/categories`                         | List all categories                     |
-| `GET`    | `/questions`                          | Paginated questions (10/page) + categories |
-| `GET`    | `/questions/<id>`                     | Fetch a single question                 |
-| `POST`   | `/questions`                          | Create a question **or** search (`{"searchTerm": "..."}`) |
-| `DELETE` | `/questions/<id>`                     | Delete a question                       |
-| `GET`    | `/categories/<id>/questions`          | Questions filtered by category          |
-| `POST`   | `/quizzes`                            | Random question, excluding previous     |
+| `GET`    | `/api/categories`                     | List all categories                     |
+| `GET`    | `/api/questions`                      | Paginated questions (10/page) + categories |
+| `GET`    | `/api/questions/<id>`                 | Fetch a single question                 |
+| `POST`   | `/api/questions`                      | Create a question **or** search (`{"searchTerm": "..."}`) |
+| `DELETE` | `/api/questions/<id>`                 | Delete a question                       |
+| `GET`    | `/api/categories/<id>/questions`      | Questions filtered by category          |
+| `POST`   | `/api/quizzes`                        | Random question, excluding previous     |
 
 All errors are returned as JSON:
 
@@ -102,28 +101,34 @@ All errors are returned as JSON:
 
 The Flask backend only serves the JSON API — the React UI lives in
 `frontend/` and runs on a separate process. It talks to the API through
-`"proxy": "http://127.0.0.1:5000/"` in `frontend/package.json`, so the
-Flask backend **must be running on port 5000** before you start the
-React dev server.
+Vite's dev proxy (`/api` → `http://127.0.0.1:5000`), so the Flask
+backend **must be running on port 5000** before you start the React dev
+server.
 
 ```bash
 cd packages/trivia/frontend
 npm install
-npm start
+npm run dev
 ```
 
-Then open **http://localhost:3000** in your browser.
+Then open **http://localhost:5173** in your browser.
 
-> The `package.json` already sets
-> `NODE_OPTIONS=--openssl-legacy-provider` for `start` and `build`, so
-> no extra env work is needed for Node 17+.
+### Start both servers at once
+
+From `packages/trivia/frontend`:
+
+```bash
+npm run start:all
+```
+
+This launches the Flask API and the Vite dev server together.
 
 ### Port map
 
 | Port | Process       | Serves                          |
 | ---- | ------------- | ------------------------------- |
 | 5000 | `trivia`      | JSON API                        |
-| 3000 | `react-scripts start` | React UI                 |
+| 5173 | `vite`        | React UI                        |
 
 ## Testing
 
@@ -161,9 +166,9 @@ OK
 
 ## Stopping the server
 
-`Ctrl+C` in the terminal where `trivia` is running, or:
+`Ctrl+C` in the terminal(s) where the servers are running, or:
 
 ```bash
-pkill -f "trivia$"          # the entry point
-pkill -f "react-scripts/scripts/start"   # the frontend
+pkill -f "trivia$"          # the Flask entry point
+pkill -f "vite"             # the frontend dev server
 ```

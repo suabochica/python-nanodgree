@@ -6,7 +6,7 @@
 
 ### Installing Dependencies
 
-Recommended node version: 16x
+Recommended node version: 18+
 
 1. **Installing Node and NPM**
    This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (the download includes NPM) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
@@ -24,13 +24,24 @@ npm install
 
 ### Running Your Frontend in Dev Mode
 
-The frontend app was built using create-react-app. In order to run the app in development mode use `npm start`. You can change the script in the `package.json` file.
+The frontend app is built with Vite and React 19. To run the app in
+development mode use `npm run dev`. You can change the script in the
+`package.json` file.
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits.
+Open [http://localhost:5173](http://localhost:5173) to view it in the
+browser. The page will reload if you make edits.
 
 ```bash
-npm start
+npm run dev
 ```
+
+### Start both servers at once
+
+```bash
+npm run start:all
+```
+
+This launches the Flask API and the Vite dev server together.
 
 ### Request Formatting
 
@@ -67,7 +78,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ### Expected endpoints and behaviors
 
-`GET '/categories'`
+`GET '/api/categories'`
 
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
@@ -88,7 +99,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`GET '/questions?page=${integer}'`
+`GET '/api/questions?page=${integer}'`
 
 - Fetches a paginated set of questions, a total number of questions, all categories and current category string.
 - Request Arguments: `page` - integer
@@ -120,7 +131,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`GET '/categories/${id}/questions'`
+`GET '/api/categories/${id}/questions'`
 
 - Fetches questions for a cateogry specified by id request argument
 - Request Arguments: `id` - integer
@@ -144,7 +155,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`DELETE '/questions/${id}'`
+`DELETE '/api/questions/${id}'`
 
 - Deletes a specified question using the id of the question
 - Request Arguments: `id` - integer
@@ -152,7 +163,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`POST '/quizzes'`
+`POST '/api/quizzes'`
 
 - Sends a post request in order to get the next question
 - Request Body:
@@ -180,7 +191,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`POST '/questions'`
+`POST '/api/questions'`
 
 - Sends a post request in order to add a new question
 - Request Body:
@@ -198,7 +209,7 @@ You can optionally update this game play to increase the number of questions or 
 
 ---
 
-`POST '/questions'`
+`POST '/api/questions'`
 
 - Sends a post request in order to search for a specific question by search term
 - Request Body:

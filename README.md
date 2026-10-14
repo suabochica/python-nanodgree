@@ -1,7 +1,5 @@
 # Python Nano Degree
 
-- [ ] TO DO: Add program index
-
 ## Install Python on Ubuntu
 
 ### ⚠️ The Golden Rule: Always Use a Virtual Environment

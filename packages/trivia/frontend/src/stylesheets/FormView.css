@@ -1,7 +1,35 @@
-.form-view > label {
-  padding: 0px 0px 10px;
+#add-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--margin-wide);
 }
 
-#add-form {
+#add-form > h2 {
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-xl);
   text-align: center;
+}
+
+.form-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  background-color: var(--color-surface-container-lowest);
+  border: var(--border-structural);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-raised);
+  padding: var(--space-xl);
+}
+
+.form-view .button {
+  align-self: stretch;
+  margin-top: var(--space-sm);
 }

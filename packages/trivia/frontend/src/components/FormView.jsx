@@ -52,17 +52,17 @@ function FormView() {
         id='add-question-form'
         onSubmit={submitQuestion}
       >
-        <label>
+        <label className='label'>
           Question
-          <input type='text' name='question' onChange={handleChange} />
+          <input className='input' type='text' name='question' onChange={handleChange} />
         </label>
-        <label>
+        <label className='label'>
           Answer
-          <input type='text' name='answer' onChange={handleChange} />
+          <input className='input' type='text' name='answer' onChange={handleChange} />
         </label>
-        <label>
+        <label className='label'>
           Difficulty
-          <select name='difficulty' onChange={handleChange}>
+          <select className='select' name='difficulty' onChange={handleChange}>
             <option value='1'>1</option>
             <option value='2'>2</option>
             <option value='3'>3</option>
@@ -70,9 +70,9 @@ function FormView() {
             <option value='5'>5</option>
           </select>
         </label>
-        <label>
+        <label className='label'>
           Category
-          <select name='category' onChange={handleChange}>
+          <select className='select' name='category' onChange={handleChange}>
             {Object.keys(categories).map((id) => (
               <option key={id} value={id}>
                 {categories[id]}

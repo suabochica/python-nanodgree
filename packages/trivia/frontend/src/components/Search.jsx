@@ -16,6 +16,7 @@ function Search({ submitSearch }) {
   return (
     <form onSubmit={getInfo}>
       <input
+        className='input'
         placeholder='Search questions...'
         ref={inputRef}
         onChange={handleInputChange}

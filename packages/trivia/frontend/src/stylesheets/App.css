@@ -1,39 +1,16 @@
-.App-header {
-  background-color: #222;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  height: 75px;
-  padding: 20px;
-  padding-right: 40%;
-  padding-left: 5%;
-}
+/* App shell — layout only. Component styling lives in each view's sheet. */
 
-.App-header > h1 {
-  color: dodgerblue;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-h2 {
-  text-align: center;
-}
-
-li {
-  text-align: center;
-  margin: 5px 0px;
-}
-
-ul {
-  list-style-type: none;
-  padding-inline-start: 0px;
-}
-
-form {
+.App {
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: auto;
+  flex: 1;
+}
+
+/* Constrained 12-column-style content column */
+.view {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--margin-wide);
+  flex: 1;
 }
